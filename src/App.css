@@ -1,22 +1,22 @@
 :root {
-  /* Színpaletta */
-  --primary-color: #2c3e50;
-  --secondary-color: #34495e;
-  --accent-color: #FF6B6B;
-  --accent-hover: #FF5252;
-  --success-color: #27ae60;
-  --warning-color: #f39c12;
-  --danger-color: #e74c3c;
+  /* Light Theme - Gray, White, Green Palette */
+  --primary-color: #2d3748;
+  --secondary-color: #4a5568;
+  --accent-color: #10b981;
+  --accent-hover: #059669;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
   
   /* Háttér színek */
-  --bg-light: #ecf0f1;
+  --bg-light: #f7fafc;
   --bg-white: #ffffff;
-  --bg-dark: #1a252f;
+  --bg-dark: #1a202c;
   
   /* Szöveg színek */
-  --text-dark: #2c3e50;
-  --text-light: #7f8c8d;
-  --text-white: #ffffff;
+  --text-dark: #2d3748;
+  --text-light: #718096;
+  --text-white: #f7fafc;
   
   /* Árnyékok */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -31,6 +31,60 @@
   --navbar-height: 70px;
   --max-width: 1200px;
   --border-radius: 8px;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+  animation: fadeIn 0.6s ease-out 0.1s forwards;
+  opacity: 0;
+}
+
+.fade-in-delay-2 {
+  animation: fadeIn 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.fade-in-delay-3 {
+  animation: fadeIn 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --primary-color: #cbd5e0;
+  --secondary-color: #a0aec0;
+  --accent-color: #34d399;
+  --accent-hover: #10b981;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --danger-color: #f87171;
+  
+  --bg-light: #1a202c;
+  --bg-white: #2d3748;
+  --bg-dark: #0f1419;
+  
+  --text-dark: #e2e8f0;
+  --text-light: #a0aec0;
+  --text-white: #f7fafc;
+  
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -48,6 +102,7 @@ body {
   background-color: var(--bg-light);
   color: var(--text-dark);
   line-height: 1.6;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 #root {
@@ -123,6 +178,11 @@ body {
   padding: 20px;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
+  border: 1px solid transparent;
+}
+
+[data-theme="dark"] .card {
+  border-color: rgba(16, 185, 129, 0.1);
 }
 
 .card:hover {
@@ -147,10 +207,18 @@ body {
 .form-select {
   width: 100%;
   padding: 12px;
-  border: 2px solid #ddd;
+  border: 2px solid #e2e8f0;
   border-radius: var(--border-radius);
   font-size: 16px;
   transition: border-color var(--transition-fast);
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea,
+[data-theme="dark"] .form-select {
+  border-color: #4a5568;
 }
 
 .form-input:focus,
@@ -194,8 +262,12 @@ body {
 /* Elválasztó */
 .divider {
   height: 1px;
-  background-color: #ddd;
+  background-color: #e2e8f0;
   margin: 20px 0;
+}
+
+[data-theme="dark"] .divider {
+  background-color: #4a5568;
 }
 
 /* Badge */

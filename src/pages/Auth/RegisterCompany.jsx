@@ -71,7 +71,7 @@ const RegisterCompany = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-container">
+      <div className="auth-container fade-in">
         <div className="auth-card card">
           <h1 className="auth-title">Register - Company</h1>
           <p className="auth-subtitle">Register your business and start accepting reservations!</p>

@@ -50,7 +50,7 @@ const Login = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-container">
+      <div className="auth-container fade-in">
         <div className="auth-card card">
           <h1 className="auth-title">Login</h1>
           <p className="auth-subtitle">Welcome back to ReserveIt! system</p>

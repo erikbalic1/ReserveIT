@@ -131,9 +131,8 @@ const CompanyDetails = () => {
   }
 
   return (
-    <div className="company-details-page">
-      <div className="company-hero">
-        <img src={company.image} alt={company.name} />
+    <div className="company-details-page fade-in">
+      <div className="company-hero">\n        <img src={company.image} alt={company.name} />
         <div className="hero-overlay">
           <div className="container">
             <h1>{company.name}</h1>
@@ -166,8 +165,8 @@ const CompanyDetails = () => {
               <h2>Contact</h2>
               <div className="contact-info">
                 <p><strong>📍 Address:</strong> {company.address}</p>
-                <p><strong>📞 Phone:</strong> {company.phone}</p>
-                <p><strong>📧 Email:</strong> {company.email}</p>
+                <p><strong>Phone:</strong> {company.phone}</p>
+                <p><strong>Email:</strong> {company.email}</p>
                 <p><strong>🕐 Opening Hours:</strong> {company.openingHours}</p>
               </div>
             </div>

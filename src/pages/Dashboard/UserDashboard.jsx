@@ -78,7 +78,7 @@ const UserDashboard = () => {
 
   return (
     <div className="dashboard-page">
-      <div className="container py-3">
+      <div className="container py-3 fade-in">
         <div className="dashboard-header">
           <div>
             <h1>User Dashboard</h1>
@@ -97,7 +97,7 @@ const UserDashboard = () => {
             <p>Active Bookings</p>
           </div>
           <div className="card stat-card">
-            <div className="stat-icon">✅</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'completed').length}</h3>
             <p>Completed</p>
           </div>

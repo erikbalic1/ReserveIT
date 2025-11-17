@@ -105,28 +105,28 @@ const CompanyDashboard = () => {
 
   return (
     <div className="dashboard-page">
-      <div className="container py-3">
+      <div className="container py-3 fade-in">
         <div className="dashboard-header">
           <div>
             <h1>Company Dashboard</h1>
-            <p>Welcome, <strong>{user?.name}</strong>! 🏢</p>
+            <p>Welcome, <strong>{user?.name}</strong>!</p>
           </div>
         </div>
 
         {/* Statistics */}
         <div className="grid grid-3">
           <div className="card stat-card">
-            <div className="stat-icon">⏳</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'pending').length}</h3>
             <p>Pending</p>
           </div>
           <div className="card stat-card">
-            <div className="stat-icon">✅</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'confirmed').length}</h3>
             <p>Confirmed</p>
           </div>
           <div className="card stat-card">
-            <div className="stat-icon">🎉</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'completed').length}</h3>
             <p>Completed</p>
           </div>

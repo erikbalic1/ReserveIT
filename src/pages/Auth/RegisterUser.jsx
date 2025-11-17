@@ -53,7 +53,7 @@ const RegisterUser = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-container">
+      <div className="auth-container fade-in">
         <div className="auth-card card">
           <h1 className="auth-title">Sign Up - User</h1>
           <p className="auth-subtitle">Join us and book appointments with ease!</p>

@@ -97,7 +97,7 @@ const CompanyList = () => {
 
   return (
     <div className="company-list-page">
-      <div className="container py-3">
+      <div className="container py-3 fade-in">
         <div className="page-header">
           <h1>Companies</h1>
           <p className="text-light">Choose from our service providers and book an appointment!</p>
@@ -140,7 +140,7 @@ const CompanyList = () => {
                   <p className="company-description">{company.description}</p>
                   <div className="company-details">
                     <p><strong>📍</strong> {company.address}</p>
-                    <p><strong>📞</strong> {company.phone}</p>
+                    <p><strong>Phone:</strong> {company.phone}</p>
                   </div>
                   <Link to={`/company/${company.id}`} className="btn btn-accent mt-2">
                     Details & Book

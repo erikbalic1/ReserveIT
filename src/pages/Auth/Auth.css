@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-light);
 }
 
 .auth-container {
@@ -49,7 +49,12 @@
   top: 50%;
   width: 40%;
   height: 1px;
-  background-color: #ddd;
+  background-color: #e2e8f0;
+}
+
+[data-theme="dark"] .auth-divider::before,
+[data-theme="dark"] .auth-divider::after {
+  background-color: #4a5568;
 }
 
 .auth-divider::before {
@@ -82,7 +87,7 @@
 }
 
 .error-message {
-  background-color: #fee;
+  background-color: #fee2e2;
   color: var(--danger-color);
   padding: 12px;
   border-radius: var(--border-radius);
@@ -91,13 +96,23 @@
   font-weight: 500;
 }
 
+[data-theme="dark"] .error-message {
+  background-color: #4a1c1c;
+  color: #f87171;
+}
+
 .demo-credentials {
   margin-top: 30px;
   padding: 15px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-light);
+  border: 1px solid #e2e8f0;
   border-radius: var(--border-radius);
   font-size: 14px;
   text-align: center;
+}
+
+[data-theme="dark"] .demo-credentials {
+  border-color: #4a5568;
 }
 
 .demo-credentials p {

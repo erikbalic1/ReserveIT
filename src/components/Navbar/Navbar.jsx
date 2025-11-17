@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
@@ -39,7 +42,12 @@ const Navbar = () => {
         {/* Navigation menu */}
         <ul className={`navbar-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <li className="navbar-item">
-            <Link to="/" className="navbar-link" onClick={closeMobileMenu}>
+            <Link to="/" className={`navbar-link ${location.pathname === '/' ? 'active' : ''}`} onClick={closeMobileMenu}>
+              Home
+            </Link>
+          </li>
+          <li className="navbar-item">
+            <Link to="/companies" className={`navbar-link ${location.pathname === '/companies' ? 'active' : ''}`} onClick={closeMobileMenu}>
               Companies
             </Link>
           </li>
@@ -47,7 +55,7 @@ const Navbar = () => {
           {!user ? (
             <>
               <li className="navbar-item">
-                <Link to="/login" className="navbar-link" onClick={closeMobileMenu}>
+                <Link to="/login" className={`navbar-link ${location.pathname === '/login' ? 'active' : ''}`} onClick={closeMobileMenu}>
                   Login
                 </Link>
               </li>
@@ -67,7 +75,7 @@ const Navbar = () => {
               <li className="navbar-item">
                 <Link 
                   to={user.role === 'company' ? '/dashboard/company' : '/dashboard/user'} 
-                  className="navbar-link"
+                  className={`navbar-link ${location.pathname.includes('/dashboard') ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
                   Dashboard
@@ -86,6 +94,19 @@ const Navbar = () => {
               </li>
             </>
           )}
+
+          {/* Theme Toggle Switch */}
+          <li className="navbar-item">
+            <label className="theme-switch">
+              <input 
+                type="checkbox" 
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+                aria-label="Toggle theme"
+              />
+              <span className="slider"></span>
+            </label>
+          </li>
         </ul>
       </div>
     </nav>

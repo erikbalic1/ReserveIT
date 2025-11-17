@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 
 // Pages
+import Home from './pages/Home/Home';
 import CompanyList from './pages/CompanyList/CompanyList';
 import CompanyDetails from './pages/CompanyDetails/CompanyDetails';
 import Login from './pages/Auth/Login';
@@ -38,7 +40,8 @@ function AppContent() {
         <Navbar />
         <Routes>
           {/* Publikus útvonalak */}
-          <Route path="/" element={<CompanyList />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/companies" element={<CompanyList />} />
           <Route path="/company/:id" element={<CompanyDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register/user" element={<RegisterUser />} />
@@ -75,9 +78,11 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

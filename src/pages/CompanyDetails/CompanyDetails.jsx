@@ -3,43 +3,43 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './CompanyDetails.css';
 
-// Dummy vállalkozások (ugyanaz mint CompanyList-ben)
+// Dummy companies (same as in CompanyList)
 const DUMMY_COMPANIES = [
   {
     id: 1,
-    name: 'Szépségszalon Bella',
-    description: 'Professzionális fodrászat és kozmetika Budapest szívében',
-    address: '1052 Budapest, Petőfi Sándor utca 12.',
+    name: 'Beauty Salon Bella',
+    description: 'Professional hairdressing and cosmetics in the heart of Budapest',
+    address: '1052 Budapest, Petofi Street 12.',
     phone: '+36 20 123 4567',
     email: 'info@bella.hu',
-    category: 'Szépségápolás',
-    image: 'https://via.placeholder.com/800x400?text=Szépségszalon',
-    services: ['Női hajvágás', 'Férfi hajvágás', 'Festés', 'Manikűr', 'Pedikűr'],
-    openingHours: 'H-P: 9:00-19:00, Szo: 9:00-15:00'
+    category: 'Beauty & Hair',
+    image: 'https://via.placeholder.com/800x400?text=Beauty+Salon',
+    services: ['Women\'s Haircut', 'Men\'s Haircut', 'Hair Coloring', 'Manicure', 'Pedicure'],
+    openingHours: 'Mon-Fri: 9:00-19:00, Sat: 9:00-15:00'
   },
   {
     id: 2,
     name: 'Fitness Center Plus',
-    description: 'Modern edzőterem személyi edzőkkel',
-    address: '1136 Budapest, Váci út 45.',
+    description: 'Modern gym with personal trainers',
+    address: '1136 Budapest, Vaci Street 45.',
     phone: '+36 30 987 6543',
     email: 'info@fitnessplus.hu',
-    category: 'Sport',
+    category: 'Fitness & Sports',
     image: 'https://via.placeholder.com/800x400?text=Fitness',
-    services: ['Személyi edzés', 'Csoportos órák', 'Spinning', 'Jóga'],
-    openingHours: 'H-P: 6:00-22:00, Szo-V: 8:00-20:00'
+    services: ['Personal Training', 'Group Classes', 'Spinning', 'Yoga'],
+    openingHours: 'Mon-Fri: 6:00-22:00, Sat-Sun: 8:00-20:00'
   },
   {
     id: 3,
-    name: 'Autó Szerviz Profi',
-    description: 'Teljes körű gépjármű szervizelés és karbantartás',
-    address: '1113 Budapest, Karolina út 67.',
+    name: 'Auto Service Pro',
+    description: 'Complete vehicle servicing and maintenance',
+    address: '1113 Budapest, Karolina Street 67.',
     phone: '+36 20 555 1234',
-    email: 'info@autoprofi.hu',
-    category: 'Autószerelés',
-    image: 'https://via.placeholder.com/800x400?text=Autószerviz',
-    services: ['Szerviz', 'Gumiabroncs csere', 'Műszaki vizsga', 'Diagnosztika'],
-    openingHours: 'H-P: 8:00-17:00'
+    email: 'info@autopro.hu',
+    category: 'Auto Services',
+    image: 'https://via.placeholder.com/800x400?text=Auto+Service',
+    services: ['Service', 'Tire Replacement', 'Technical Inspection', 'Diagnostics'],
+    openingHours: 'Mon-Fri: 8:00-17:00'
   }
 ];
 
@@ -59,7 +59,7 @@ const CompanyDetails = () => {
   const [showReservationForm, setShowReservationForm] = useState(false);
 
   useEffect(() => {
-    // Dummy API hívás szimulálása
+    // Simulating dummy API call
     setTimeout(() => {
       const foundCompany = DUMMY_COMPANIES.find(c => c.id === parseInt(id));
       setCompany(foundCompany);
@@ -78,24 +78,24 @@ const CompanyDetails = () => {
     e.preventDefault();
     
     if (!user) {
-      alert('Jelentkezz be a foglaláshoz!');
+      alert('Please log in to make a reservation!');
       navigate('/login');
       return;
     }
 
     if (user.role === 'company') {
-      alert('Vállalkozásként nem tudsz foglalni!');
+      alert('Companies cannot make reservations!');
       return;
     }
 
-    // Dummy foglalás létrehozása
-    console.log('Új foglalás:', {
+    // Creating dummy reservation
+    console.log('New reservation:', {
       company: company.name,
       user: user.name,
       ...reservationForm
     });
 
-    alert(`Foglalás sikeresen létrehozva!\n\nVállalkozás: ${company.name}\nDátum: ${reservationForm.date}\nIdőpont: ${reservationForm.time}\nSzolgáltatás: ${reservationForm.service}`);
+    alert(`Reservation successfully created!\n\nCompany: ${company.name}\nDate: ${reservationForm.date}\nTime: ${reservationForm.time}\nService: ${reservationForm.service}`);
     
     // Form reset
     setReservationForm({
@@ -111,7 +111,7 @@ const CompanyDetails = () => {
     return (
       <div className="container py-3">
         <div className="text-center">
-          <h2>Betöltés...</h2>
+          <h2>Loading...</h2>
         </div>
       </div>
     );
@@ -121,9 +121,9 @@ const CompanyDetails = () => {
     return (
       <div className="container py-3">
         <div className="text-center">
-          <h2>Vállalkozás nem található</h2>
+          <h2>Company not found</h2>
           <button className="btn btn-primary mt-2" onClick={() => navigate('/')}>
-            Vissza a listához
+            Back to list
           </button>
         </div>
       </div>
@@ -144,15 +144,15 @@ const CompanyDetails = () => {
 
       <div className="container py-3">
         <div className="company-content">
-          {/* Bal oldal - Információk */}
+          {/* Left side - Information */}
           <div className="company-info-section">
             <div className="card">
-              <h2>Leírás</h2>
+              <h2>Description</h2>
               <p>{company.description}</p>
             </div>
 
             <div className="card">
-              <h2>Szolgáltatások</h2>
+              <h2>Services</h2>
               <ul className="services-list">
                 {company.services.map((service, index) => (
                   <li key={index}>
@@ -163,20 +163,20 @@ const CompanyDetails = () => {
             </div>
 
             <div className="card">
-              <h2>Elérhetőség</h2>
+              <h2>Contact</h2>
               <div className="contact-info">
-                <p><strong>📍 Cím:</strong> {company.address}</p>
-                <p><strong>📞 Telefon:</strong> {company.phone}</p>
+                <p><strong>📍 Address:</strong> {company.address}</p>
+                <p><strong>📞 Phone:</strong> {company.phone}</p>
                 <p><strong>📧 Email:</strong> {company.email}</p>
-                <p><strong>🕐 Nyitvatartás:</strong> {company.openingHours}</p>
+                <p><strong>🕐 Opening Hours:</strong> {company.openingHours}</p>
               </div>
             </div>
           </div>
 
-          {/* Jobb oldal - Foglalás */}
+          {/* Right side - Reservation */}
           <div className="reservation-section">
             <div className="card">
-              <h2>Időpont foglalás</h2>
+              <h2>Book Appointment</h2>
               
               {!showReservationForm ? (
                 <button 
@@ -184,12 +184,12 @@ const CompanyDetails = () => {
                   onClick={() => setShowReservationForm(true)}
                   style={{ width: '100%' }}
                 >
-                  Foglalás indítása
+                  Start Booking
                 </button>
               ) : (
                 <form onSubmit={handleReservationSubmit}>
                   <div className="form-group">
-                    <label className="form-label">Dátum *</label>
+                    <label className="form-label">Date *</label>
                     <input
                       type="date"
                       name="date"
@@ -202,7 +202,7 @@ const CompanyDetails = () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Időpont *</label>
+                    <label className="form-label">Time *</label>
                     <select
                       name="time"
                       className="form-select"
@@ -210,7 +210,7 @@ const CompanyDetails = () => {
                       onChange={handleInputChange}
                       required
                     >
-                      <option value="">Válassz időpontot</option>
+                      <option value="">Select time</option>
                       <option value="09:00">09:00</option>
                       <option value="10:00">10:00</option>
                       <option value="11:00">11:00</option>
@@ -224,7 +224,7 @@ const CompanyDetails = () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Szolgáltatás *</label>
+                    <label className="form-label">Service *</label>
                     <select
                       name="service"
                       className="form-select"
@@ -232,7 +232,7 @@ const CompanyDetails = () => {
                       onChange={handleInputChange}
                       required
                     >
-                      <option value="">Válassz szolgáltatást</option>
+                      <option value="">Select service</option>
                       {company.services.map((service, index) => (
                         <option key={index} value={service}>{service}</option>
                       ))}
@@ -240,27 +240,27 @@ const CompanyDetails = () => {
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Megjegyzés</label>
+                    <label className="form-label">Notes</label>
                     <textarea
                       name="notes"
                       className="form-textarea"
                       rows="3"
                       value={reservationForm.notes}
                       onChange={handleInputChange}
-                      placeholder="Egyéb kérések, megjegyzések..."
+                      placeholder="Any special requests or notes..."
                     />
                   </div>
 
                   <div className="form-actions">
                     <button type="submit" className="btn btn-accent">
-                      Foglalás megerősítése
+                      Confirm Booking
                     </button>
                     <button 
                       type="button" 
                       className="btn btn-outline"
                       onClick={() => setShowReservationForm(false)}
                     >
-                      Mégse
+                      Cancel
                     </button>
                   </div>
                 </form>
@@ -270,7 +270,7 @@ const CompanyDetails = () => {
         </div>
 
         <button className="btn btn-outline mt-3" onClick={() => navigate('/')}>
-          ← Vissza a vállalkozásokhoz
+          ← Back to companies
         </button>
       </div>
     </div>

@@ -21,13 +21,13 @@ const RegisterCompany = () => {
   const [error, setError] = useState('');
 
   const categories = [
-    'Szépségápolás',
-    'Sport',
-    'Wellness',
-    'Autószerelés',
-    'Állatorvos',
-    'Étterem',
-    'Egyéb'
+    'Beauty & Hair',
+    'Fitness & Sports',
+    'Wellness & Spa',
+    'Auto Services',
+    'Veterinary',
+    'Restaurant',
+    'Other'
   ];
 
   const handleChange = (e) => {
@@ -41,18 +41,18 @@ const RegisterCompany = () => {
     e.preventDefault();
     setError('');
 
-    // Validáció
+    // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('A jelszavak nem egyeznek!');
+      setError('Passwords do not match!');
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('A jelszónak legalább 6 karakter hosszúnak kell lennie!');
+      setError('Password must be at least 6 characters long!');
       return;
     }
 
-    // Dummy regisztráció
+    // Dummy registration
     register({
       id: Math.random(),
       name: formData.companyName,
@@ -65,7 +65,7 @@ const RegisterCompany = () => {
       role: 'company'
     }, 'dummy-token-new-company');
 
-    alert('Sikeres vállalkozás regisztráció! Üdvözlünk a ReserveIt! rendszerben!');
+    alert('Company registration successful! Welcome to ReserveIt! system!');
     navigate('/dashboard/company');
   };
 
@@ -73,14 +73,14 @@ const RegisterCompany = () => {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-card card">
-          <h1 className="auth-title">Regisztráció - Vállalkozás</h1>
-          <p className="auth-subtitle">Regisztráld vállalkozásod és kezdd el fogadni a foglalásokat!</p>
+          <h1 className="auth-title">Register - Company</h1>
+          <p className="auth-subtitle">Register your business and start accepting reservations!</p>
 
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Vállalkozás neve *</label>
+              <label className="form-label">Company Name *</label>
               <input
                 type="text"
                 name="companyName"
@@ -88,12 +88,12 @@ const RegisterCompany = () => {
                 value={formData.companyName}
                 onChange={handleChange}
                 required
-                placeholder="Szépségszalon Bella"
+                placeholder="Beauty Salon Bella"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Tulajdonos neve *</label>
+              <label className="form-label">Owner Name *</label>
               <input
                 type="text"
                 name="ownerName"
@@ -101,12 +101,12 @@ const RegisterCompany = () => {
                 value={formData.ownerName}
                 onChange={handleChange}
                 required
-                placeholder="Nagy Éva"
+                placeholder="Jane Smith"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email cím *</label>
+              <label className="form-label">Email Address *</label>
               <input
                 type="email"
                 name="email"
@@ -114,12 +114,12 @@ const RegisterCompany = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="info@vallalkozas.hu"
+                placeholder="info@company.com"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Telefonszám *</label>
+              <label className="form-label">Phone Number *</label>
               <input
                 type="tel"
                 name="phone"
@@ -132,7 +132,7 @@ const RegisterCompany = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Cím *</label>
+              <label className="form-label">Address *</label>
               <input
                 type="text"
                 name="address"
@@ -140,12 +140,12 @@ const RegisterCompany = () => {
                 value={formData.address}
                 onChange={handleChange}
                 required
-                placeholder="1052 Budapest, Petőfi Sándor utca 12."
+                placeholder="1052 Budapest, Petofi Street 12."
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Kategória *</label>
+              <label className="form-label">Category *</label>
               <select
                 name="category"
                 className="form-select"
@@ -153,7 +153,7 @@ const RegisterCompany = () => {
                 onChange={handleChange}
                 required
               >
-                <option value="">Válassz kategóriát</option>
+                <option value="">Select category</option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -161,7 +161,7 @@ const RegisterCompany = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Leírás *</label>
+              <label className="form-label">Description *</label>
               <textarea
                 name="description"
                 className="form-textarea"
@@ -169,12 +169,12 @@ const RegisterCompany = () => {
                 value={formData.description}
                 onChange={handleChange}
                 required
-                placeholder="Rövid leírás a vállalkozásról és szolgáltatásokról..."
+                placeholder="Brief description of your business and services..."
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Jelszó *</label>
+              <label className="form-label">Password *</label>
               <input
                 type="password"
                 name="password"
@@ -182,12 +182,12 @@ const RegisterCompany = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="Minimum 6 karakter"
+                placeholder="Minimum 6 characters"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Jelszó megerősítése *</label>
+              <label className="form-label">Confirm Password *</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -195,23 +195,23 @@ const RegisterCompany = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                placeholder="Jelszó újra"
+                placeholder="Re-enter password"
               />
             </div>
 
             <button type="submit" className="btn btn-accent auth-btn">
-              Vállalkozás regisztrálása
+              Register Company
             </button>
           </form>
 
           <div className="auth-divider">
-            <span>vagy</span>
+            <span>or</span>
           </div>
 
           <div className="auth-links">
-            <p>Már van fiókod?</p>
+            <p>Already have an account?</p>
             <Link to="/login" className="btn btn-outline">
-              Bejelentkezés
+              Login
             </Link>
           </div>
         </div>

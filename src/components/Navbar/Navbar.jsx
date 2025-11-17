@@ -36,11 +36,11 @@ const Navbar = () => {
           ☰
         </button>
 
-        {/* Navigációs menü */}
+        {/* Navigation menu */}
         <ul className={`navbar-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <li className="navbar-item">
             <Link to="/" className="navbar-link" onClick={closeMobileMenu}>
-              Vállalkozások
+              Companies
             </Link>
           </li>
 
@@ -48,17 +48,17 @@ const Navbar = () => {
             <>
               <li className="navbar-item">
                 <Link to="/login" className="navbar-link" onClick={closeMobileMenu}>
-                  Bejelentkezés
+                  Login
                 </Link>
               </li>
               <li className="navbar-item">
                 <Link to="/register/user" className="navbar-btn navbar-btn-outline" onClick={closeMobileMenu}>
-                  Regisztráció (Felhasználó)
+                  Sign Up (User)
                 </Link>
               </li>
               <li className="navbar-item">
                 <Link to="/register/company" className="navbar-btn" onClick={closeMobileMenu}>
-                  Vállalkozás regisztráció
+                  Register Company
                 </Link>
               </li>
             </>
@@ -76,12 +76,12 @@ const Navbar = () => {
               <li className="navbar-item navbar-user">
                 <span className="navbar-user-name">{user.name}</span>
                 <span className="navbar-user-role">
-                  {user.role === 'company' ? 'Vállalkozás' : 'Felhasználó'}
+                  {user.role === 'company' ? 'Company' : 'User'}
                 </span>
               </li>
               <li className="navbar-item">
                 <button className="navbar-btn" onClick={handleLogout}>
-                  Kilépés
+                  Logout
                 </button>
               </li>
             </>

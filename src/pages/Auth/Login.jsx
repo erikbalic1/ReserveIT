@@ -24,27 +24,27 @@ const Login = () => {
     e.preventDefault();
     setError('');
 
-    // Dummy bejelentkezés validáció
+    // Dummy login validation
     if (formData.email === 'user@test.hu' && formData.password === 'password') {
-      // User bejelentkezés
+      // User login
       login({
         id: 1,
-        name: 'Teszt Felhasználó',
+        name: 'Test User',
         email: formData.email,
         role: 'user'
       }, 'dummy-token-123');
       navigate('/dashboard/user');
     } else if (formData.email === 'company@test.hu' && formData.password === 'password') {
-      // Company bejelentkezés
+      // Company login
       login({
         id: 2,
-        name: 'Teszt Vállalkozás',
+        name: 'Test Company',
         email: formData.email,
         role: 'company'
       }, 'dummy-token-456');
       navigate('/dashboard/company');
     } else {
-      setError('Hibás email vagy jelszó!');
+      setError('Invalid email or password!');
     }
   };
 
@@ -52,14 +52,14 @@ const Login = () => {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-card card">
-          <h1 className="auth-title">Bejelentkezés</h1>
-          <p className="auth-subtitle">Üdvözlünk vissza a ReserveIt! rendszerben</p>
+          <h1 className="auth-title">Login</h1>
+          <p className="auth-subtitle">Welcome back to ReserveIt! system</p>
 
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Email cím</label>
+              <label className="form-label">Email Address</label>
               <input
                 type="email"
                 name="email"
@@ -67,12 +67,12 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="pelda@email.hu"
+                placeholder="example@email.com"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Jelszó</label>
+              <label className="form-label">Password</label>
               <input
                 type="password"
                 name="password"
@@ -85,28 +85,28 @@ const Login = () => {
             </div>
 
             <button type="submit" className="btn btn-accent auth-btn">
-              Bejelentkezés
+              Login
             </button>
           </form>
 
           <div className="auth-divider">
-            <span>vagy</span>
+            <span>or</span>
           </div>
 
           <div className="auth-links">
-            <p>Még nincs fiókod?</p>
+            <p>Don't have an account?</p>
             <Link to="/register/user" className="btn btn-outline">
-              Regisztráció felhasználóként
+              Sign Up as User
             </Link>
             <Link to="/register/company" className="btn btn-primary">
-              Regisztráció vállalkozásként
+              Register as Company
             </Link>
           </div>
 
           <div className="demo-credentials">
-            <p><strong>Demo bejelentkezési adatok:</strong></p>
-            <p>Felhasználó: user@test.hu / password</p>
-            <p>Vállalkozás: company@test.hu / password</p>
+            <p><strong>Demo login credentials:</strong></p>
+            <p>User: user@test.hu / password</p>
+            <p>Company: company@test.hu / password</p>
           </div>
         </div>
       </div>

@@ -27,18 +27,18 @@ const RegisterUser = () => {
     e.preventDefault();
     setError('');
 
-    // Validáció
+    // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('A jelszavak nem egyeznek!');
+      setError('Passwords do not match!');
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('A jelszónak legalább 6 karakter hosszúnak kell lennie!');
+      setError('Password must be at least 6 characters long!');
       return;
     }
 
-    // Dummy regisztráció
+    // Dummy registration
     register({
       id: Math.random(),
       name: formData.name,
@@ -47,7 +47,7 @@ const RegisterUser = () => {
       role: 'user'
     }, 'dummy-token-new-user');
 
-    alert('Sikeres regisztráció! Üdvözlünk a ReserveIt! rendszerben!');
+    alert('Registration successful! Welcome to ReserveIt! system!');
     navigate('/dashboard/user');
   };
 
@@ -55,14 +55,14 @@ const RegisterUser = () => {
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-card card">
-          <h1 className="auth-title">Regisztráció - Felhasználó</h1>
-          <p className="auth-subtitle">Csatlakozz hozzánk és foglalj időpontokat könnyedén!</p>
+          <h1 className="auth-title">Sign Up - User</h1>
+          <p className="auth-subtitle">Join us and book appointments with ease!</p>
 
           {error && <div className="error-message">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Teljes név *</label>
+              <label className="form-label">Full Name *</label>
               <input
                 type="text"
                 name="name"
@@ -70,12 +70,12 @@ const RegisterUser = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                placeholder="Kovács János"
+                placeholder="John Doe"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email cím *</label>
+              <label className="form-label">Email Address *</label>
               <input
                 type="email"
                 name="email"
@@ -83,12 +83,12 @@ const RegisterUser = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder="pelda@email.hu"
+                placeholder="example@email.com"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Telefonszám *</label>
+              <label className="form-label">Phone Number *</label>
               <input
                 type="tel"
                 name="phone"
@@ -101,7 +101,7 @@ const RegisterUser = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Jelszó *</label>
+              <label className="form-label">Password *</label>
               <input
                 type="password"
                 name="password"
@@ -109,12 +109,12 @@ const RegisterUser = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder="Minimum 6 karakter"
+                placeholder="Minimum 6 characters"
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Jelszó megerősítése *</label>
+              <label className="form-label">Confirm Password *</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -122,23 +122,23 @@ const RegisterUser = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                placeholder="Jelszó újra"
+                placeholder="Re-enter password"
               />
             </div>
 
             <button type="submit" className="btn btn-accent auth-btn">
-              Regisztráció
+              Sign Up
             </button>
           </form>
 
           <div className="auth-divider">
-            <span>vagy</span>
+            <span>or</span>
           </div>
 
           <div className="auth-links">
-            <p>Már van fiókod?</p>
+            <p>Already have an account?</p>
             <Link to="/login" className="btn btn-outline">
-              Bejelentkezés
+              Login
             </Link>
           </div>
         </div>

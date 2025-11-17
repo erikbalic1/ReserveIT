@@ -3,23 +3,23 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
-// Dummy foglalások vállalkozásnak
+// Dummy reservations for company
 const DUMMY_COMPANY_RESERVATIONS = [
   {
     id: 1,
-    userName: 'Kiss Anna',
+    userName: 'Anna Kiss',
     userPhone: '+36 20 111 2222',
-    service: 'Női hajvágás',
+    service: 'Women\'s Haircut',
     date: '2025-11-20',
     time: '10:00',
     status: 'pending',
-    notes: 'Kérem, hogy rövid hajat szeretnék'
+    notes: 'Please, I would like short hair'
   },
   {
     id: 2,
-    userName: 'Nagy Péter',
+    userName: 'Peter Nagy',
     userPhone: '+36 30 333 4444',
-    service: 'Férfi hajvágás',
+    service: 'Men\'s Haircut',
     date: '2025-11-21',
     time: '14:00',
     status: 'confirmed',
@@ -27,19 +27,19 @@ const DUMMY_COMPANY_RESERVATIONS = [
   },
   {
     id: 3,
-    userName: 'Szabó Éva',
+    userName: 'Eva Szabo',
     userPhone: '+36 70 555 6666',
-    service: 'Festés',
+    service: 'Hair Coloring',
     date: '2025-11-19',
     time: '11:00',
     status: 'completed',
-    notes: 'Világos szőke árnyalat'
+    notes: 'Light blonde shade'
   },
   {
     id: 4,
-    userName: 'Kovács János',
+    userName: 'John Kovacs',
     userPhone: '+36 20 777 8888',
-    service: 'Manikűr',
+    service: 'Manicure',
     date: '2025-11-22',
     time: '16:00',
     status: 'confirmed',
@@ -65,10 +65,10 @@ const CompanyDashboard = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      confirmed: { class: 'badge-success', text: 'Megerősítve' },
-      pending: { class: 'badge-warning', text: 'Függőben' },
-      completed: { class: 'badge-success', text: 'Befejezve' },
-      cancelled: { class: 'badge-danger', text: 'Törölve' }
+      confirmed: { class: 'badge-success', text: 'Confirmed' },
+      pending: { class: 'badge-warning', text: 'Pending' },
+      completed: { class: 'badge-success', text: 'Completed' },
+      cancelled: { class: 'badge-danger', text: 'Cancelled' }
     };
     return badges[status] || badges.pending;
   };
@@ -77,22 +77,22 @@ const CompanyDashboard = () => {
     setReservations(reservations.map(res => 
       res.id === id ? { ...res, status: 'confirmed' } : res
     ));
-    alert('Foglalás megerősítve!');
+    alert('Reservation confirmed!');
   };
 
   const handleCompleteReservation = (id) => {
     setReservations(reservations.map(res => 
       res.id === id ? { ...res, status: 'completed' } : res
     ));
-    alert('Foglalás befejezettként jelölve!');
+    alert('Reservation marked as completed!');
   };
 
   const handleCancelReservation = (id) => {
-    if (window.confirm('Biztosan törölni szeretnéd ezt a foglalást?')) {
+    if (window.confirm('Are you sure you want to cancel this reservation?')) {
       setReservations(reservations.map(res => 
         res.id === id ? { ...res, status: 'cancelled' } : res
       ));
-      alert('Foglalás törölve!');
+      alert('Reservation cancelled!');
     }
   };
 
@@ -108,61 +108,61 @@ const CompanyDashboard = () => {
       <div className="container py-3">
         <div className="dashboard-header">
           <div>
-            <h1>Vállalkozói Dashboard</h1>
-            <p>Üdvözlünk, <strong>{user?.name}</strong>! 🏢</p>
+            <h1>Company Dashboard</h1>
+            <p>Welcome, <strong>{user?.name}</strong>! 🏢</p>
           </div>
         </div>
 
-        {/* Statisztikák */}
+        {/* Statistics */}
         <div className="grid grid-3">
           <div className="card stat-card">
             <div className="stat-icon">⏳</div>
             <h3>{reservations.filter(r => r.status === 'pending').length}</h3>
-            <p>Függőben lévő</p>
+            <p>Pending</p>
           </div>
           <div className="card stat-card">
             <div className="stat-icon">✅</div>
             <h3>{reservations.filter(r => r.status === 'confirmed').length}</h3>
-            <p>Megerősített</p>
+            <p>Confirmed</p>
           </div>
           <div className="card stat-card">
             <div className="stat-icon">🎉</div>
             <h3>{reservations.filter(r => r.status === 'completed').length}</h3>
-            <p>Befejezett</p>
+            <p>Completed</p>
           </div>
         </div>
 
-        {/* Szűrés */}
+        {/* Filter */}
         <div className="filter-buttons">
           <button 
             className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
           >
-            Összes
+            All
           </button>
           <button 
             className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
             onClick={() => setFilter('pending')}
           >
-            Függőben
+            Pending
           </button>
           <button 
             className={`filter-btn ${filter === 'confirmed' ? 'active' : ''}`}
             onClick={() => setFilter('confirmed')}
           >
-            Megerősített
+            Confirmed
           </button>
           <button 
             className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
             onClick={() => setFilter('past')}
           >
-            Lezárt
+            Past
           </button>
         </div>
 
-        {/* Foglalások lista */}
+        {/* Reservations list */}
         <div className="reservations-section">
-          <h2>Foglalások kezelése</h2>
+          <h2>Manage Reservations</h2>
           
           {filteredReservations.length > 0 ? (
             <div className="reservations-list">
@@ -177,24 +177,24 @@ const CompanyDashboard = () => {
                     
                     <div className="reservation-details">
                       <div className="detail-row">
-                        <span className="detail-label">Telefon:</span>
+                        <span className="detail-label">Phone:</span>
                         <span>{reservation.userPhone}</span>
                       </div>
                       <div className="detail-row">
-                        <span className="detail-label">Szolgáltatás:</span>
+                        <span className="detail-label">Service:</span>
                         <span>{reservation.service}</span>
                       </div>
                       <div className="detail-row">
-                        <span className="detail-label">Dátum:</span>
+                        <span className="detail-label">Date:</span>
                         <span>{reservation.date}</span>
                       </div>
                       <div className="detail-row">
-                        <span className="detail-label">Időpont:</span>
+                        <span className="detail-label">Time:</span>
                         <span>{reservation.time}</span>
                       </div>
                       {reservation.notes && (
                         <div className="detail-row">
-                          <span className="detail-label">Megjegyzés:</span>
+                          <span className="detail-label">Notes:</span>
                           <span>{reservation.notes}</span>
                         </div>
                       )}
@@ -206,7 +206,7 @@ const CompanyDashboard = () => {
                           className="btn btn-accent btn-sm"
                           onClick={() => handleConfirmReservation(reservation.id)}
                         >
-                          Megerősítés
+                          Confirm
                         </button>
                       )}
                       {reservation.status === 'confirmed' && (
@@ -214,7 +214,7 @@ const CompanyDashboard = () => {
                           className="btn btn-primary btn-sm"
                           onClick={() => handleCompleteReservation(reservation.id)}
                         >
-                          Befejezettként jelöl
+                          Mark as Completed
                         </button>
                       )}
                       {(reservation.status === 'pending' || reservation.status === 'confirmed') && (
@@ -222,7 +222,7 @@ const CompanyDashboard = () => {
                           className="btn btn-outline btn-sm"
                           onClick={() => handleCancelReservation(reservation.id)}
                         >
-                          Törlés
+                          Cancel
                         </button>
                       )}
                     </div>
@@ -232,7 +232,7 @@ const CompanyDashboard = () => {
             </div>
           ) : (
             <div className="no-data">
-              <p>Nincs megjeleníthető foglalás ebben a kategóriában.</p>
+              <p>No reservations to display in this category.</p>
             </div>
           )}
         </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 
 // Pages
 import CompanyList from './pages/CompanyList/CompanyList';
@@ -66,6 +67,7 @@ function AppContent() {
           {/* 404 - Nem található oldal */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );

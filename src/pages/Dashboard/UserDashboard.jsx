@@ -3,21 +3,21 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
-// Dummy foglalások
+// Dummy reservations
 const DUMMY_USER_RESERVATIONS = [
   {
     id: 1,
-    company: 'Szépségszalon Bella',
-    service: 'Női hajvágás',
+    company: 'Beauty Salon Bella',
+    service: 'Women\'s Haircut',
     date: '2025-11-20',
     time: '10:00',
     status: 'confirmed',
-    notes: 'Kérem, hogy rövid hajat szeretnék'
+    notes: 'Please, I would like short hair'
   },
   {
     id: 2,
     company: 'Fitness Center Plus',
-    service: 'Személyi edzés',
+    service: 'Personal Training',
     date: '2025-11-22',
     time: '15:00',
     status: 'pending',
@@ -25,12 +25,12 @@ const DUMMY_USER_RESERVATIONS = [
   },
   {
     id: 3,
-    company: 'Autó Szerviz Profi',
-    service: 'Szerviz',
+    company: 'Auto Service Pro',
+    service: 'Service',
     date: '2025-11-18',
     time: '09:00',
     status: 'completed',
-    notes: 'Olajcsere és szűrőcsere'
+    notes: 'Oil change and filter replacement'
   }
 ];
 
@@ -52,20 +52,20 @@ const UserDashboard = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      confirmed: { class: 'badge-success', text: 'Megerősítve' },
-      pending: { class: 'badge-warning', text: 'Függőben' },
-      completed: { class: 'badge-success', text: 'Befejezve' },
-      cancelled: { class: 'badge-danger', text: 'Törölve' }
+      confirmed: { class: 'badge-success', text: 'Confirmed' },
+      pending: { class: 'badge-warning', text: 'Pending' },
+      completed: { class: 'badge-success', text: 'Completed' },
+      cancelled: { class: 'badge-danger', text: 'Cancelled' }
     };
     return badges[status] || badges.pending;
   };
 
   const handleCancelReservation = (id) => {
-    if (window.confirm('Biztosan törölni szeretnéd ezt a foglalást?')) {
+    if (window.confirm('Are you sure you want to cancel this reservation?')) {
       setReservations(reservations.map(res => 
         res.id === id ? { ...res, status: 'cancelled' } : res
       ));
-      alert('Foglalás sikeresen törölve!');
+      alert('Reservation successfully cancelled!');
     }
   };
 
@@ -81,58 +81,58 @@ const UserDashboard = () => {
       <div className="container py-3">
         <div className="dashboard-header">
           <div>
-            <h1>Felhasználói Dashboard</h1>
-            <p>Üdvözlünk, <strong>{user?.name}</strong>! 👋</p>
+            <h1>User Dashboard</h1>
+            <p>Welcome, <strong>{user?.name}</strong>! 👋</p>
           </div>
           <button className="btn btn-outline" onClick={() => navigate('/')}>
-            Új foglalás
+            New Booking
           </button>
         </div>
 
-        {/* Statisztikák */}
+        {/* Statistics */}
         <div className="grid grid-3">
           <div className="card stat-card">
             <div className="stat-icon">📅</div>
             <h3>{reservations.filter(r => r.status === 'confirmed' || r.status === 'pending').length}</h3>
-            <p>Aktív foglalás</p>
+            <p>Active Bookings</p>
           </div>
           <div className="card stat-card">
             <div className="stat-icon">✅</div>
             <h3>{reservations.filter(r => r.status === 'completed').length}</h3>
-            <p>Befejezett</p>
+            <p>Completed</p>
           </div>
           <div className="card stat-card">
             <div className="stat-icon">🔔</div>
             <h3>{reservations.filter(r => r.status === 'pending').length}</h3>
-            <p>Függőben</p>
+            <p>Pending</p>
           </div>
         </div>
 
-        {/* Szűrés */}
+        {/* Filter */}
         <div className="filter-buttons">
           <button 
             className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
             onClick={() => setFilter('all')}
           >
-            Összes
+            All
           </button>
           <button 
             className={`filter-btn ${filter === 'upcoming' ? 'active' : ''}`}
             onClick={() => setFilter('upcoming')}
           >
-            Közelgő
+            Upcoming
           </button>
           <button 
             className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
             onClick={() => setFilter('past')}
           >
-            Lezárt
+            Past
           </button>
         </div>
 
-        {/* Foglalások lista */}
+        {/* Reservations list */}
         <div className="reservations-section">
-          <h2>Foglalásaim</h2>
+          <h2>My Bookings</h2>
           
           {filteredReservations.length > 0 ? (
             <div className="reservations-list">
@@ -147,20 +147,20 @@ const UserDashboard = () => {
                     
                     <div className="reservation-details">
                       <div className="detail-row">
-                        <span className="detail-label">Szolgáltatás:</span>
+                        <span className="detail-label">Service:</span>
                         <span>{reservation.service}</span>
                       </div>
                       <div className="detail-row">
-                        <span className="detail-label">Dátum:</span>
+                        <span className="detail-label">Date:</span>
                         <span>{reservation.date}</span>
                       </div>
                       <div className="detail-row">
-                        <span className="detail-label">Időpont:</span>
+                        <span className="detail-label">Time:</span>
                         <span>{reservation.time}</span>
                       </div>
                       {reservation.notes && (
                         <div className="detail-row">
-                          <span className="detail-label">Megjegyzés:</span>
+                          <span className="detail-label">Notes:</span>
                           <span>{reservation.notes}</span>
                         </div>
                       )}
@@ -172,7 +172,7 @@ const UserDashboard = () => {
                           className="btn btn-outline btn-sm"
                           onClick={() => handleCancelReservation(reservation.id)}
                         >
-                          Foglalás törlése
+                          Cancel Booking
                         </button>
                       </div>
                     )}
@@ -182,7 +182,7 @@ const UserDashboard = () => {
             </div>
           ) : (
             <div className="no-data">
-              <p>Nincs megjeleníthető foglalás ebben a kategóriában.</p>
+              <p>No reservations to display in this category.</p>
             </div>
           )}
         </div>

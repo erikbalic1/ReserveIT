@@ -1,0 +1,193 @@
+.dashboard-page {
+  min-height: calc(100vh - var(--navbar-height));
+  background-color: var(--bg-light);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  color: var(--primary-color);
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.dashboard-header p {
+  color: var(--text-light);
+  font-size: 18px;
+}
+
+/* Statisztika kártyák */
+.stat-card {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: var(--text-white);
+  border: none;
+}
+
+.stat-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.stat-card h3 {
+  font-size: 36px;
+  margin-bottom: 5px;
+  color: var(--text-white);
+}
+
+.stat-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+}
+
+/* Szűrő gombok */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  border: 2px solid var(--primary-color);
+  background-color: transparent;
+  color: var(--primary-color);
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.filter-btn.active {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: var(--text-white);
+}
+
+/* Foglalások szekció */
+.reservations-section h2 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-size: 26px;
+}
+
+.reservations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reservation-card {
+  border-left: 4px solid var(--accent-color);
+}
+
+.reservation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--bg-light);
+}
+
+.reservation-header h3 {
+  color: var(--primary-color);
+  font-size: 20px;
+  margin: 0;
+}
+
+.reservation-details {
+  margin-bottom: 15px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.reservation-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+/* Nincs adat */
+.no-data {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius);
+  color: var(--text-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 26px;
+  }
+
+  .stat-card {
+    padding: 20px 15px;
+  }
+
+  .stat-icon {
+    font-size: 36px;
+  }
+
+  .stat-card h3 {
+    font-size: 28px;
+  }
+
+  .reservation-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .reservation-actions {
+    flex-direction: column;
+  }
+
+  .reservation-actions .btn {
+    width: 100%;
+  }
+}

@@ -54,11 +54,20 @@ router.get('/:id', async (req, res) => {
 // @access  Public
 router.get('/user/:userId', async (req, res) => {
   try {
-    const reservations = await Reservation.find({ userId: req.params.userId }).sort({ createdAt: -1 });
+    const reservations = await Reservation.find({ userId: req.params.userId })
+      .populate('companyId', 'name')
+      .sort({ createdAt: -1 });
+    
+    // Map the data to include companyName for easier frontend usage
+    const formattedReservations = reservations.map(reservation => ({
+      ...reservation.toObject(),
+      companyName: reservation.companyId?.name || 'Unknown Company'
+    }));
+    
     res.json({
       success: true,
-      count: reservations.length,
-      data: reservations
+      count: formattedReservations.length,
+      data: formattedReservations
     });
   } catch (error) {
     res.status(500).json({
@@ -74,7 +83,9 @@ router.get('/user/:userId', async (req, res) => {
 // @access  Public
 router.get('/company/:companyId', async (req, res) => {
   try {
-    const reservations = await Reservation.find({ companyId: req.params.companyId }).sort({ createdAt: -1 });
+    const reservations = await Reservation.find({ companyId: req.params.companyId })
+      .populate('userId', 'name')
+      .sort({ createdAt: -1 });
     res.json({
       success: true,
       count: reservations.length,

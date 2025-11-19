@@ -119,9 +119,9 @@ const UserDashboard = () => {
         <div className="dashboard-header">
           <div>
             <h1>User Dashboard</h1>
-            <p>Welcome, <strong>{user?.name}</strong>! 👋</p>
+            <p>Welcome, <strong>{user?.name}</strong>!</p>
           </div>
-          <button className="btn btn-outline" onClick={() => navigate('/')}>
+          <button className="btn btn-outline" onClick={() => navigate('/companies')}>
             New Booking
           </button>
         </div>
@@ -129,7 +129,7 @@ const UserDashboard = () => {
         {/* Statistics */}
         <div className="grid grid-3">
           <div className="card stat-card">
-            <div className="stat-icon">📅</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'confirmed' || r.status === 'pending').length}</h3>
             <p>Active Bookings</p>
           </div>
@@ -139,7 +139,7 @@ const UserDashboard = () => {
             <p>Completed</p>
           </div>
           <div className="card stat-card">
-            <div className="stat-icon">🔔</div>
+            <div className="stat-icon"></div>
             <h3>{reservations.filter(r => r.status === 'pending').length}</h3>
             <p>Pending</p>
           </div>

@@ -113,12 +113,6 @@ const Login = () => {
               Register as Company
             </Link>
           </div>
-
-          <div className="demo-credentials">
-            <p><strong>Demo login credentials:</strong></p>
-            <p>User: user@test.hu / password</p>
-            <p>Company: company@test.hu / password</p>
-          </div>
         </div>
       </div>
     </div>

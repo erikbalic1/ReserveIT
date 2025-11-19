@@ -115,7 +115,8 @@ const CompanyDetails = () => {
 
   return (
     <div className="company-details-page fade-in">
-      <div className="company-hero">\n        <img src={company.image} alt={company.name} />
+      <div className="company-hero">
+        <img src={company.image} alt={company.name} />
         <div className="hero-overlay">
           <div className="container">
             <h1>{company.name}</h1>

@@ -15,7 +15,7 @@ const generateToken = (id) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password, phone, category, description, address } = req.body;
+    const { name, email, password, phone, category, description, address, services, openingHours, image } = req.body;
 
     // Check if company already exists
     const companyExists = await Company.findOne({ email });
@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
       });
     }
 
-    // Create company
+    // Create company (password will be hashed by pre-save hook)
     const company = await Company.create({
       name,
       email,
@@ -34,7 +34,10 @@ router.post('/register', async (req, res) => {
       phone,
       category,
       description,
-      address
+      address,
+      services,
+      openingHours,
+      image
     });
 
     if (company) {
@@ -113,7 +116,7 @@ router.post('/login', async (req, res) => {
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const companies = await Company.find().select('-password');
+    const companies = await Company.find().select('-password').sort({ createdAt: -1 });
     res.json({
       success: true,
       count: companies.length,

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { userAPI, companyAPI } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -29,26 +30,48 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Bejelentkezés
-  const login = (userData, token) => {
-    const userWithRole = {
-      ...userData,
-      token
-    };
-    setUser(userWithRole);
-    localStorage.setItem('reserveit_user', JSON.stringify(userWithRole));
-    localStorage.setItem('reserveit_token', token);
+  const login = async (credentials, role = 'user') => {
+    try {
+      const api = role === 'company' ? companyAPI : userAPI;
+      const response = await api.login(credentials);
+      
+      if (response.success) {
+        const userData = response.data;
+        setUser(userData);
+        localStorage.setItem('reserveit_user', JSON.stringify(userData));
+        localStorage.setItem('token', userData.token);
+        return { success: true, data: userData };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, message: error.message };
+    }
   };
 
   // Regisztráció
-  const register = (userData, token) => {
-    login(userData, token);
+  const register = async (userData, role = 'user') => {
+    try {
+      const api = role === 'company' ? companyAPI : userAPI;
+      const response = await api.register(userData);
+      
+      if (response.success) {
+        const newUser = response.data;
+        setUser(newUser);
+        localStorage.setItem('reserveit_user', JSON.stringify(newUser));
+        localStorage.setItem('token', newUser.token);
+        return { success: true, data: newUser };
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      return { success: false, message: error.message };
+    }
   };
 
   // Kijelentkezés
   const logout = () => {
     setUser(null);
     localStorage.removeItem('reserveit_user');
-    localStorage.removeItem('reserveit_token');
+    localStorage.removeItem('token');
   };
 
   // User adatok frissítése

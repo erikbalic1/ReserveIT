@@ -9,9 +9,11 @@ const Login = () => {
   
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    role: 'user'
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -20,31 +22,27 @@ const Login = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    // Dummy login validation
-    if (formData.email === 'user@test.hu' && formData.password === 'password') {
-      // User login
-      login({
-        id: 1,
-        name: 'Test User',
-        email: formData.email,
-        role: 'user'
-      }, 'dummy-token-123');
-      navigate('/dashboard/user');
-    } else if (formData.email === 'company@test.hu' && formData.password === 'password') {
-      // Company login
-      login({
-        id: 2,
-        name: 'Test Company',
-        email: formData.email,
-        role: 'company'
-      }, 'dummy-token-456');
-      navigate('/dashboard/company');
-    } else {
-      setError('Invalid email or password!');
+    try {
+      const result = await login(
+        { email: formData.email, password: formData.password },
+        formData.role
+      );
+
+      if (result.success) {
+        const userData = result.data;
+        navigate(userData.role === 'company' ? '/dashboard/company' : '/dashboard/user');
+      } else {
+        setError(result.message || 'Invalid email or password!');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,8 +82,21 @@ const Login = () => {
               />
             </div>
 
-            <button type="submit" className="btn btn-accent auth-btn">
-              Login
+            <div className="form-group">
+              <label className="form-label">Login As</label>
+              <select
+                name="role"
+                className="form-select"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="user">User</option>
+                <option value="company">Company</option>
+              </select>
+            </div>
+
+            <button type="submit" className="btn btn-accent auth-btn" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 

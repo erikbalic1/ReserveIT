@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { reservationAPI, userAPI } from '../../services/api';
 import './Dashboard.css';
 
 // Dummy reservations
@@ -39,6 +40,7 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user || user.role !== 'user') {
@@ -46,8 +48,21 @@ const UserDashboard = () => {
       return;
     }
 
-    // Dummy adatok betöltése
-    setReservations(DUMMY_USER_RESERVATIONS);
+    // Fetch user's reservations from database
+    const fetchReservations = async () => {
+      try {
+        const response = await reservationAPI.getByUser(user.id);
+        if (response.success) {
+          setReservations(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching reservations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReservations();
   }, [user, navigate]);
 
   const getStatusBadge = (status) => {
@@ -60,12 +75,34 @@ const UserDashboard = () => {
     return badges[status] || badges.pending;
   };
 
-  const handleCancelReservation = (id) => {
+  const handleCancelReservation = async (id) => {
     if (window.confirm('Are you sure you want to cancel this reservation?')) {
-      setReservations(reservations.map(res => 
-        res.id === id ? { ...res, status: 'cancelled' } : res
-      ));
-      alert('Reservation successfully cancelled!');
+      try {
+        const response = await reservationAPI.update(id, { status: 'cancelled' });
+        if (response.success) {
+          setReservations(reservations.map(res => 
+            res._id === id ? { ...res, status: 'cancelled' } : res
+          ));
+          alert('Reservation successfully cancelled!');
+        }
+      } catch (error) {
+        console.error('Error canceling reservation:', error);
+        alert('Failed to cancel reservation. Please try again.');
+      }
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone and will delete all your reservations.')) {
+      try {
+        await userAPI.delete(user.id);
+        alert('Account deleted successfully');
+        logout();
+        navigate('/');
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        alert('Failed to delete account. Please try again.');
+      }
     }
   };
 
@@ -139,9 +176,9 @@ const UserDashboard = () => {
               {filteredReservations.map(reservation => {
                 const badge = getStatusBadge(reservation.status);
                 return (
-                  <div key={reservation.id} className="card reservation-card">
+                  <div key={reservation._id || reservation.id} className="card reservation-card">
                     <div className="reservation-header">
-                      <h3>{reservation.company}</h3>
+                      <h3>{reservation.companyName || reservation.company || 'Company'}</h3>
                       <span className={`badge ${badge.class}`}>{badge.text}</span>
                     </div>
                     
@@ -170,7 +207,7 @@ const UserDashboard = () => {
                       <div className="reservation-actions">
                         <button 
                           className="btn btn-outline btn-sm"
-                          onClick={() => handleCancelReservation(reservation.id)}
+                          onClick={() => handleCancelReservation(reservation._id || reservation.id)}
                         >
                           Cancel Booking
                         </button>
@@ -185,6 +222,16 @@ const UserDashboard = () => {
               <p>No reservations to display in this category.</p>
             </div>
           )}
+        </div>
+
+        <div className="delete-account-section">
+          <button 
+            className="btn btn-outline btn-danger"
+            onClick={handleDeleteAccount}
+            style={{ marginTop: '2rem', backgroundColor: '#ef4444', color: 'white', border: 'none' }}
+          >
+            Delete Account
+          </button>
         </div>
       </div>
     </div>

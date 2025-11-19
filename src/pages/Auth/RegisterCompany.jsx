@@ -15,10 +15,13 @@ const RegisterCompany = () => {
     address: '',
     description: '',
     category: '',
+    services: '',
+    openingHours: '',
     password: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const categories = [
     'Beauty & Hair',
@@ -37,7 +40,7 @@ const RegisterCompany = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -52,21 +55,29 @@ const RegisterCompany = () => {
       return;
     }
 
-    // Dummy registration
-    register({
-      id: Math.random(),
-      name: formData.companyName,
-      ownerName: formData.ownerName,
-      email: formData.email,
-      phone: formData.phone,
-      address: formData.address,
-      description: formData.description,
-      category: formData.category,
-      role: 'company'
-    }, 'dummy-token-new-company');
+    setLoading(true);
 
-    alert('Company registration successful! Welcome to ReserveIt! system!');
-    navigate('/dashboard/company');
+    try {
+      const { confirmPassword, companyName, services, ...rest } = formData;
+      const companyData = {
+        name: companyName,
+        services: services ? services.split(',').map(s => s.trim()).filter(s => s) : [],
+        ...rest
+      };
+      
+      const result = await register(companyData, 'company');
+
+      if (result.success) {
+        alert('Company registration successful! Welcome to ReserveIt! system!');
+        navigate('/dashboard/company');
+      } else {
+        setError(result.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -174,6 +185,33 @@ const RegisterCompany = () => {
             </div>
 
             <div className="form-group">
+              <label className="form-label">Services</label>
+              <input
+                type="text"
+                name="services"
+                className="form-input"
+                value={formData.services}
+                onChange={handleChange}
+                placeholder="Haircut, Manicure, Pedicure (comma separated)"
+              />
+              <small style={{ color: 'var(--text-light)', fontSize: '0.85rem' }}>
+                Enter services separated by commas
+              </small>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Opening Hours</label>
+              <input
+                type="text"
+                name="openingHours"
+                className="form-input"
+                value={formData.openingHours}
+                onChange={handleChange}
+                placeholder="Mon-Fri: 9:00-17:00"
+              />
+            </div>
+
+            <div className="form-group">
               <label className="form-label">Password *</label>
               <input
                 type="password"
@@ -199,8 +237,8 @@ const RegisterCompany = () => {
               />
             </div>
 
-            <button type="submit" className="btn btn-accent auth-btn">
-              Register Company
+            <button type="submit" className="btn btn-accent auth-btn" disabled={loading}>
+              {loading ? 'Registering...' : 'Register Company'}
             </button>
           </form>
 

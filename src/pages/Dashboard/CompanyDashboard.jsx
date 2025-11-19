@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { reservationAPI } from '../../services/api';
 import './Dashboard.css';
 
 // Dummy reservations for company
@@ -52,6 +53,7 @@ const CompanyDashboard = () => {
   const navigate = useNavigate();
   const [reservations, setReservations] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user || user.role !== 'company') {
@@ -59,8 +61,21 @@ const CompanyDashboard = () => {
       return;
     }
 
-    // Dummy adatok betöltése
-    setReservations(DUMMY_COMPANY_RESERVATIONS);
+    // Fetch company's reservations from database
+    const fetchReservations = async () => {
+      try {
+        const response = await reservationAPI.getByCompany(user.id);
+        if (response.success) {
+          setReservations(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching reservations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReservations();
   }, [user, navigate]);
 
   const getStatusBadge = (status) => {
@@ -73,26 +88,50 @@ const CompanyDashboard = () => {
     return badges[status] || badges.pending;
   };
 
-  const handleConfirmReservation = (id) => {
-    setReservations(reservations.map(res => 
-      res.id === id ? { ...res, status: 'confirmed' } : res
-    ));
-    alert('Reservation confirmed!');
+  const handleConfirmReservation = async (id) => {
+    try {
+      const response = await reservationAPI.update(id, { status: 'confirmed' });
+      if (response.success) {
+        setReservations(reservations.map(res => 
+          res._id === id ? { ...res, status: 'confirmed' } : res
+        ));
+        alert('Reservation confirmed!');
+      }
+    } catch (error) {
+      console.error('Error confirming reservation:', error);
+      alert('Failed to confirm reservation.');
+    }
   };
 
-  const handleCompleteReservation = (id) => {
-    setReservations(reservations.map(res => 
-      res.id === id ? { ...res, status: 'completed' } : res
-    ));
-    alert('Reservation marked as completed!');
+  const handleCompleteReservation = async (id) => {
+    try {
+      const response = await reservationAPI.update(id, { status: 'completed' });
+      if (response.success) {
+        setReservations(reservations.map(res => 
+          res._id === id ? { ...res, status: 'completed' } : res
+        ));
+        alert('Reservation marked as completed!');
+      }
+    } catch (error) {
+      console.error('Error completing reservation:', error);
+      alert('Failed to complete reservation.');
+    }
   };
 
-  const handleCancelReservation = (id) => {
+  const handleCancelReservation = async (id) => {
     if (window.confirm('Are you sure you want to cancel this reservation?')) {
-      setReservations(reservations.map(res => 
-        res.id === id ? { ...res, status: 'cancelled' } : res
-      ));
-      alert('Reservation cancelled!');
+      try {
+        const response = await reservationAPI.update(id, { status: 'cancelled' });
+        if (response.success) {
+          setReservations(reservations.map(res => 
+            res._id === id ? { ...res, status: 'cancelled' } : res
+          ));
+          alert('Reservation cancelled!');
+        }
+      } catch (error) {
+        console.error('Error canceling reservation:', error);
+        alert('Failed to cancel reservation.');
+      }
     }
   };
 
@@ -169,7 +208,7 @@ const CompanyDashboard = () => {
               {filteredReservations.map(reservation => {
                 const badge = getStatusBadge(reservation.status);
                 return (
-                  <div key={reservation.id} className="card reservation-card">
+                  <div key={reservation._id || reservation.id} className="card reservation-card">
                     <div className="reservation-header">
                       <h3>{reservation.userName}</h3>
                       <span className={`badge ${badge.class}`}>{badge.text}</span>
@@ -204,7 +243,7 @@ const CompanyDashboard = () => {
                       {reservation.status === 'pending' && (
                         <button 
                           className="btn btn-accent btn-sm"
-                          onClick={() => handleConfirmReservation(reservation.id)}
+                          onClick={() => handleConfirmReservation(reservation._id || reservation.id)}
                         >
                           Confirm
                         </button>
@@ -212,7 +251,7 @@ const CompanyDashboard = () => {
                       {reservation.status === 'confirmed' && (
                         <button 
                           className="btn btn-primary btn-sm"
-                          onClick={() => handleCompleteReservation(reservation.id)}
+                          onClick={() => handleCompleteReservation(reservation._id || reservation.id)}
                         >
                           Mark as Completed
                         </button>
@@ -220,7 +259,7 @@ const CompanyDashboard = () => {
                       {(reservation.status === 'pending' || reservation.status === 'confirmed') && (
                         <button 
                           className="btn btn-outline btn-sm"
-                          onClick={() => handleCancelReservation(reservation.id)}
+                          onClick={() => handleCancelReservation(reservation._id || reservation.id)}
                         >
                           Cancel
                         </button>

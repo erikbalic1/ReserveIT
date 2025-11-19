@@ -15,6 +15,7 @@ const RegisterUser = () => {
     confirmPassword: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -23,7 +24,7 @@ const RegisterUser = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -38,17 +39,23 @@ const RegisterUser = () => {
       return;
     }
 
-    // Dummy registration
-    register({
-      id: Math.random(),
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      role: 'user'
-    }, 'dummy-token-new-user');
+    setLoading(true);
 
-    alert('Registration successful! Welcome to ReserveIt! system!');
-    navigate('/dashboard/user');
+    try {
+      const { confirmPassword, ...userData } = formData;
+      const result = await register(userData, 'user');
+
+      if (result.success) {
+        alert('Registration successful! Welcome to ReserveIt! system!');
+        navigate('/dashboard/user');
+      } else {
+        setError(result.message || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -126,8 +133,8 @@ const RegisterUser = () => {
               />
             </div>
 
-            <button type="submit" className="btn btn-accent auth-btn">
-              Sign Up
+            <button type="submit" className="btn btn-accent auth-btn" disabled={loading}>
+              {loading ? 'Creating account...' : 'Sign Up'}
             </button>
           </form>
 

@@ -34,11 +34,13 @@ const reservationSchema = new mongoose.Schema({
     default: ''
   },
   companyId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
     required: true
   },
   userId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   }
 }, {

@@ -18,6 +18,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // Routes
+app.use('/api/users', require('./routes/users'));
+app.use('/api/companies', require('./routes/companies'));
 app.use('/api/reservations', require('./routes/reservations'));
 
 // Root endpoint

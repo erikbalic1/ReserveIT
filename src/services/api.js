@@ -88,6 +88,19 @@ export const companyAPI = {
 
   getById: async (id) => {
     return await apiCall(`/companies/${id}`);
+  },
+
+  update: async (id, companyData) => {
+    return await apiCall(`/companies/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(companyData)
+    });
+  },
+
+  delete: async (id) => {
+    return await apiCall(`/companies/${id}`, {
+      method: 'DELETE'
+    });
   }
 };
 

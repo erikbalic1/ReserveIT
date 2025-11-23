@@ -158,4 +158,99 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route   PUT /api/companies/:id
+// @desc    Update company profile
+// @access  Public
+router.put('/:id', async (req, res) => {
+  try {
+    const { name, email, phone, category, description, address, services, openingHours, image, password } = req.body;
+    const company = await Company.findById(req.params.id);
+    
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+
+    // Check if email is being changed and if it's already taken by another company
+    if (email && email !== company.email) {
+      const emailExists = await Company.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already in use'
+        });
+      }
+    }
+
+    // Update fields
+    if (name) company.name = name;
+    if (email) company.email = email;
+    if (phone) company.phone = phone;
+    if (category) company.category = category;
+    if (description !== undefined) company.description = description;
+    if (address !== undefined) company.address = address;
+    if (services !== undefined) company.services = services;
+    if (openingHours !== undefined) company.openingHours = openingHours;
+    if (image !== undefined) company.image = image;
+    if (password) company.password = password; // Will be hashed by pre-save hook
+
+    await company.save();
+    
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        id: company._id,
+        name: company.name,
+        email: company.email,
+        phone: company.phone,
+        category: company.category,
+        description: company.description,
+        address: company.address,
+        services: company.services,
+        openingHours: company.openingHours,
+        image: company.image,
+        role: company.role
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating company profile',
+      error: error.message
+    });
+  }
+});
+
+// @route   DELETE /api/companies/:id
+// @desc    Delete company account
+// @access  Public
+router.delete('/:id', async (req, res) => {
+  try {
+    const company = await Company.findById(req.params.id);
+    
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+    
+    await Company.findByIdAndDelete(req.params.id);
+    
+    res.json({
+      success: true,
+      message: 'Company account deleted successfully'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting company account',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

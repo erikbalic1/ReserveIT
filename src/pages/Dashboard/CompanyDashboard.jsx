@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { reservationAPI } from '../../services/api';
+import { reservationAPI, companyAPI } from '../../services/api';
 import './Dashboard.css';
 
 // Dummy reservations for company
@@ -54,6 +54,19 @@ const CompanyDashboard = () => {
   const [reservations, setReservations] = useState([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    category: '',
+    description: '',
+    address: '',
+    services: '',
+    openingHours: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   useEffect(() => {
     if (!user || user.role !== 'company') {
@@ -135,6 +148,88 @@ const CompanyDashboard = () => {
     }
   };
 
+  const handleEditClick = () => {
+    setEditFormData({
+      name: user.name || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      category: user.category || '',
+      description: user.description || '',
+      address: user.address || '',
+      services: user.services ? user.services.join(', ') : '',
+      openingHours: user.openingHours || '',
+      password: '',
+      confirmPassword: ''
+    });
+    setShowEditForm(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    if (editFormData.password && editFormData.password !== editFormData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    if (editFormData.password && editFormData.password.length < 6) {
+      alert('Password must be at least 6 characters long!');
+      return;
+    }
+
+    try {
+      const updateData = {
+        name: editFormData.name,
+        email: editFormData.email,
+        phone: editFormData.phone,
+        category: editFormData.category,
+        description: editFormData.description,
+        address: editFormData.address,
+        services: editFormData.services ? editFormData.services.split(',').map(s => s.trim()).filter(s => s) : [],
+        openingHours: editFormData.openingHours
+      };
+
+      // Only include password if user wants to change it
+      if (editFormData.password) {
+        updateData.password = editFormData.password;
+      }
+
+      const response = await companyAPI.update(user.id, updateData);
+
+      if (response.success) {
+        alert('Profile updated successfully!');
+        // Update user in context
+        const updatedUser = { ...user, ...response.data };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        window.location.reload(); // Reload to update context
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm('Are you sure you want to delete your company account? This action cannot be undone and will delete all your reservations.')) {
+      try {
+        await companyAPI.delete(user.id);
+        alert('Company account deleted successfully');
+        logout();
+        navigate('/');
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        alert('Failed to delete account. Please try again.');
+      }
+    }
+  };
+
   const filteredReservations = reservations.filter(res => {
     if (filter === 'all') return true;
     if (filter === 'upcoming') return res.status === 'confirmed' || res.status === 'pending';
@@ -170,6 +265,173 @@ const CompanyDashboard = () => {
             <p>Completed</p>
           </div>
         </div>
+
+        {/* Account Actions */}
+        <div className="account-actions-section">
+          <button 
+            className="btn btn-accent"
+            onClick={handleEditClick}
+          >
+            Edit Account
+          </button>
+          <button 
+            className="btn btn-outline btn-danger"
+            onClick={handleDeleteAccount}
+            style={{ backgroundColor: '#ef4444', color: 'white', border: 'none' }}
+          >
+            Delete Account
+          </button>
+        </div>
+
+        {/* Edit Profile Form */}
+        {showEditForm && (
+          <div className="card" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+            <h2>Edit Company Profile</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div className="form-group">
+                <label className="form-label">Company Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-input"
+                  value={editFormData.name}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="form-input"
+                  value={editFormData.email}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Phone *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  className="form-input"
+                  value={editFormData.phone}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Category *</label>
+                <select
+                  name="category"
+                  className="form-select"
+                  value={editFormData.category}
+                  onChange={handleEditInputChange}
+                  required
+                >
+                  <option value="">Select category</option>
+                  <option value="Beauty & Hair">Beauty & Hair</option>
+                  <option value="Fitness & Sports">Fitness & Sports</option>
+                  <option value="Wellness & Spa">Wellness & Spa</option>
+                  <option value="Auto Services">Auto Services</option>
+                  <option value="Veterinary">Veterinary</option>
+                  <option value="Restaurant">Restaurant</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Description</label>
+                <textarea
+                  name="description"
+                  className="form-textarea"
+                  rows="3"
+                  value={editFormData.description}
+                  onChange={handleEditInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Address</label>
+                <input
+                  type="text"
+                  name="address"
+                  className="form-input"
+                  value={editFormData.address}
+                  onChange={handleEditInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Services</label>
+                <input
+                  type="text"
+                  name="services"
+                  className="form-input"
+                  value={editFormData.services}
+                  onChange={handleEditInputChange}
+                  placeholder="Haircut, Manicure, Pedicure (comma separated)"
+                />
+                <small style={{ color: 'var(--text-light)', fontSize: '0.85rem' }}>
+                  Enter services separated by commas
+                </small>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Opening Hours</label>
+                <input
+                  type="text"
+                  name="openingHours"
+                  className="form-input"
+                  value={editFormData.openingHours}
+                  onChange={handleEditInputChange}
+                  placeholder="Mon-Fri: 9:00-17:00"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">New Password (leave blank to keep current)</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-input"
+                  value={editFormData.password}
+                  onChange={handleEditInputChange}
+                  placeholder="Minimum 6 characters"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Confirm New Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="form-input"
+                  value={editFormData.confirmPassword}
+                  onChange={handleEditInputChange}
+                  placeholder="Re-enter new password"
+                />
+              </div>
+
+              <div className="form-actions" style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                <button type="submit" className="btn btn-accent">
+                  Save Changes
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-outline"
+                  onClick={() => setShowEditForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
         {/* Filter */}
         <div className="filter-buttons">

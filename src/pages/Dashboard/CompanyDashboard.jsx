@@ -55,6 +55,7 @@ const CompanyDashboard = () => {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [editFormData, setEditFormData] = useState({
     name: '',
     email: '',
@@ -269,6 +270,12 @@ const CompanyDashboard = () => {
         {/* Account Actions */}
         <div className="account-actions-section">
           <button 
+            className="btn btn-primary"
+            onClick={() => setShowProfile(!showProfile)}
+          >
+            {showProfile ? 'Hide Profile' : 'Show Profile'}
+          </button>
+          <button 
             className="btn btn-accent"
             onClick={handleEditClick}
           >
@@ -282,6 +289,59 @@ const CompanyDashboard = () => {
             Delete Account
           </button>
         </div>
+
+        {/* Profile View */}
+        {showProfile && (
+          <div className="card" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+            <h2>Company Profile</h2>
+            <div className="profile-info">
+              <div className="profile-row">
+                <span className="profile-label">Company Name:</span>
+                <span className="profile-value">{user.name}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Email:</span>
+                <span className="profile-value">{user.email}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Phone:</span>
+                <span className="profile-value">{user.phone}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Category:</span>
+                <span className="profile-value">{user.category}</span>
+              </div>
+              {user.description && (
+                <div className="profile-row">
+                  <span className="profile-label">Description:</span>
+                  <span className="profile-value">{user.description}</span>
+                </div>
+              )}
+              {user.address && (
+                <div className="profile-row">
+                  <span className="profile-label">Address:</span>
+                  <span className="profile-value">{user.address}</span>
+                </div>
+              )}
+              {user.services && user.services.length > 0 && (
+                <div className="profile-row">
+                  <span className="profile-label">Services:</span>
+                  <span className="profile-value">{user.services.join(', ')}</span>
+                </div>
+              )}
+              {user.openingHours && (
+                <div className="profile-row">
+                  <span className="profile-label">Opening Hours:</span>
+                  <span className="profile-value">{user.openingHours}</span>
+                </div>
+              )}
+              <div className="profile-row">
+                <span className="profile-label">Role:</span>
+                <span className="profile-value">Company</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Edit Profile Form */}
         {showEditForm && (

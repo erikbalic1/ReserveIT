@@ -42,6 +42,7 @@ const UserDashboard = () => {
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [editFormData, setEditFormData] = useState({
     name: '',
     email: '',
@@ -214,6 +215,12 @@ const UserDashboard = () => {
         {/* Account Actions */}
         <div className="account-actions-section">
           <button 
+            className="btn btn-primary"
+            onClick={() => setShowProfile(!showProfile)}
+          >
+            {showProfile ? 'Hide Profile' : 'Show Profile'}
+          </button>
+          <button 
             className="btn btn-accent"
             onClick={handleEditClick}
           >
@@ -227,6 +234,31 @@ const UserDashboard = () => {
             Delete Account
           </button>
         </div>
+
+        {/* Profile View */}
+        {showProfile && (
+          <div className="card" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+            <h2>My Profile</h2>
+            <div className="profile-info">
+              <div className="profile-row">
+                <span className="profile-label">Name:</span>
+                <span className="profile-value">{user.name}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Email:</span>
+                <span className="profile-value">{user.email}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Phone:</span>
+                <span className="profile-value">{user.phone}</span>
+              </div>
+              <div className="profile-row">
+                <span className="profile-label">Role:</span>
+                <span className="profile-value">User</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Edit Profile Form */}
         {showEditForm && (

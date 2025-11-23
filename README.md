@@ -1,237 +1,157 @@
 # ReserveIt! 🎯
 
-Teljes körű webalkalmazás foglalási rendszer megvalósítására React, Node.js és MongoDB technológiákkal.
+A full-stack booking system developed as a university assignment to demonstrate proficiency in modern web development technologies. The project implements a complete reservation platform using React, Node.js, Express, and MongoDB.
 
-## 📝 Projekt Áttekintés
+## 📝 About the Project
 
-A ReserveIt! egy modern foglalási platform, amely összeköti a felhasználókat és vállalkozásokat. A rendszer lehetővé teszi időpontok egyszerű foglalását különböző szolgáltatásokra (szépségápolás, fitness, autószerviz, stb.).
+ReserveIt! is a modern reservation platform that connects users with service providers. The application enables users to discover businesses, schedule appointments, and manage bookings across various service categories including restaurants, cafes, hotels, gyms, spas, and beauty salons.
 
-### Főbb Funkciók
+## ✨ Key Features
 
-- 👤 **Kétféle felhasználói típus**: Felhasználók (Users) és Vállalkozások (Companies)
-- 🔐 **JWT alapú autentikáció**: Biztonságos bejelentkezés és regisztráció
-- 📅 **Foglaláskezelés**: Teljes CRUD támogatás foglalásokhoz
-- 🎨 **Modern UI**: Reszponzív dizájn React-tel
-- ⚡ **Valós idejű szűrés**: Kategóriák és keresés szerint
-- 🏢 **Vállalkozási dashboard**: Foglalások kezelése, megerősítése
-- 👨‍💼 **Felhasználói dashboard**: Saját foglalások megtekintése, törlése
+**User Features:**
+- Browse and search companies by category
+- View detailed company information and services
+- Book appointments with date and time selection
+- Manage personal reservations in dashboard
+- View, edit, and delete account profile
 
-## 💻 Technológiai Stack
+**Company Features:**
+- Receive and manage incoming reservations
+- Confirm, complete, or cancel bookings
+- View reservation statistics
+- Manage company profile and services
 
-### Frontend
-- **React 18.2** - Modern UI library
-- **React Router DOM 6.20** - Client-side routing
-- **Vite 5.0** - Gyors development build tool
-- **CSS3** - Custom styling CSS változókkal
+**Authentication & Security:**
+- Secure JWT-based authentication
+- Password hashing with bcrypt
+- Protected routes with role-based access
+- Separate registration for users and companies
 
-### Backend (Tervezett)
-- **Node.js + Express** - REST API
-- **MongoDB + Mongoose** - NoSQL adatbázis
-- **JWT** - Autentikáció
-- **bcrypt** - Jelszó titkosítás
+## 💻 Tech Stack
 
-## 🚀 Telepítés és Futtatás
+**Frontend:**
+- React 18.2.0
+- React Router DOM 6.20.0
+- Vite 5.0.8
+- Axios 1.6.2
+- CSS3
 
-### Előfeltételek
-- Node.js (v16 vagy újabb)
-- npm vagy yarn
+**Backend:**
+- Node.js
+- Express 4.18.2
+- MongoDB Atlas
+- Mongoose 8.0.3
+- JWT 9.0.2
+- bcryptjs 2.4.3
 
-### Lépések
+## 🚀 Getting Started
 
-1. **Függőségek telepítése**
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- MongoDB Atlas account
+
+### Backend Setup
+
+1. Navigate to backend directory:
+```bash
+cd backend
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. **Development szerver indítása**
+3. Create `.env` file with:
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+PORT=5000
+```
+
+4. Start the server:
 ```bash
 npm run dev
 ```
 
-Az alkalmazás elérhető lesz a `http://localhost:3000` címen.
+Backend will run at `http://localhost:5000`
 
-3. **Build production-re**
+### Frontend Setup
+
+1. Navigate to root directory:
 ```bash
-npm run build
+cd ..
 ```
 
-4. **Build előnézet**
+2. Install dependencies:
 ```bash
-npm run preview
+npm install
 ```
 
-## 📁 Projekt Struktúra
+3. Start development server:
+```bash
+npm run dev
+```
+
+Application will be available at `http://localhost:3001`
+
+## 📁 Project Structure
 
 ```
 ReserveIT/
-├── public/
+├── backend/
+│   ├── models/          # MongoDB schemas
+│   ├── routes/          # API endpoints
+│   └── server.js        # Express server
 ├── src/
-│   ├── components/
-│   │   └── Navbar/
-│   │       ├── Navbar.jsx
-│   │       └── Navbar.css
-│   ├── context/
-│   │   └── AuthContext.jsx
-│   ├── pages/
-│   │   ├── Auth/
-│   │   │   ├── Login.jsx
-│   │   │   ├── RegisterUser.jsx
-│   │   │   ├── RegisterCompany.jsx
-│   │   │   └── Auth.css
-│   │   ├── CompanyList/
-│   │   │   ├── CompanyList.jsx
-│   │   │   └── CompanyList.css
-│   │   ├── CompanyDetails/
-│   │   │   ├── CompanyDetails.jsx
-│   │   │   └── CompanyDetails.css
-│   │   └── Dashboard/
-│   │       ├── UserDashboard.jsx
-│   │       ├── CompanyDashboard.jsx
-│   │       └── Dashboard.css
-│   ├── App.jsx
-│   ├── App.css
-│   └── main.jsx
-├── index.html
-├── vite.config.js
-├── package.json
-└── README.md
+│   ├── components/      # React components
+│   ├── context/         # Auth & Theme context
+│   ├── pages/           # Page components
+│   ├── services/        # API service layer
+│   └── App.jsx          # Main app component
+└── package.json
 ```
 
-## 🎨 Design Kiemelések
+## 🗂️ API Endpoints
 
-### Navbar Logo Dizájn
-A projekt különleges figyelmet fordít a **ReserveIt!** logó dizájnjára:
-- **"Reserve"** - Alapszín (fehér)
-- **"It!"** - Kiemelt accent szín (#FF6B6B)
-- Pulse animáció az "It!" részen
-- Hover effektek és átmenetek
+**Authentication:**
+- `POST /api/users/register` - User registration
+- `POST /api/users/login` - User login
+- `POST /api/companies/register` - Company registration
+- `POST /api/companies/login` - Company login
 
-### Színpaletta
-```css
---primary-color: #2c3e50;      /* Sötétkék */
---secondary-color: #34495e;     /* Szürke-kék */
---accent-color: #FF6B6B;        /* Élénk piros */
---success-color: #27ae60;       /* Zöld */
---warning-color: #f39c12;       /* Narancs */
-```
+**Reservations:**
+- `GET /api/reservations/user/:id` - Get user reservations
+- `GET /api/reservations/company/:id` - Get company reservations
+- `POST /api/reservations` - Create reservation
+- `PUT /api/reservations/:id` - Update reservation
+- `DELETE /api/reservations/:id` - Cancel reservation
 
-## 🔑 Demo Bejelentkezési Adatok
+**Profile Management:**
+- `PUT /api/users/:id` - Update user profile
+- `DELETE /api/users/:id` - Delete user account
+- `PUT /api/companies/:id` - Update company profile
+- `DELETE /api/companies/:id` - Delete company account
 
-### Felhasználó
-- **Email**: `user@test.hu`
-- **Jelszó**: `password`
+## 👤 Demo Accounts
 
-### Vállalkozás
-- **Email**: `company@test.hu`
-- **Jelszó**: `password`
+**User Account:**
+- Email: `john@example.com`
+- Password: `password123`
 
-## 📱 Útvonalak (Routes)
+**Company Account:**
+- Email: `luxe.salon@example.com`
+- Password: `password123`
 
-| Útvonal | Leírás | Védett |
-|---------|---------|--------|
-| `/` | Vállalkozások listája | Nyilvános |
-| `/company/:id` | Vállalkozás részletei | Nyilvános |
-| `/login` | Bejelentkezés | Nyilvános |
-| `/register/user` | Felhasználó regisztráció | Nyilvános |
-| `/register/company` | Vállalkozás regisztráció | Nyilvános |
-| `/dashboard/user` | Felhasználói dashboard | UserOnly |
-| `/dashboard/company` | Vállalkozói dashboard | Company Only |
+## 📄 License
 
-## 🗂️ Adatmodellek
+This project was created for educational purposes as a university assignment.
 
-### User (Felhasználó)
-```javascript
-{
-  id: Number,
-  name: String,
-  email: String,
-  phone: String,
-  role: 'user',
-  password: String (hashed)
-}
-```
+## 👨‍💻 Author
 
-### Company (Vállalkozás)
-```javascript
-{
-  id: Number,
-  name: String,
-  ownerName: String,
-  email: String,
-  phone: String,
-  address: String,
-  description: String,
-  category: String,
-  services: [String],
-  openingHours: String,
-  role: 'company',
-  password: String (hashed)
-}
-```
-
-### Reservation (Foglalás)
-```javascript
-{
-  id: Number,
-  userId: Number,
-  companyId: Number,
-  userName: String,
-  companyName: String,
-  service: String,
-  date: String,
-  time: String,
-  status: 'pending' | 'confirmed' | 'completed' | 'cancelled',
-  notes: String
-}
-```
-
-## ✨ Funkciók Részletesen
-
-### Felhasználói oldal
-- ✅ Vállalkozások böngészése és keresése
-- ✅ Kategóriák szerinti szűrés
-- ✅ Vállalkozás részleteinek megtekintése
-- ✅ Időpont foglalása
-- ✅ Saját foglalások megtekintése
-- ✅ Foglalások törlése
-
-### Vállalkozási oldal
-- ✅ Beérkező foglalások megtekintése
-- ✅ Foglalások megerősítése
-- ✅ Foglalások befejezettként jelölése
-- ✅ Foglalások törlése
-- ✅ Statisztikák megtekintése
-
-## 🔧 Következő Lépések (Backend)
-
-1. **Node.js + Express API létrehozása**
-   - REST endpoints a CRUD műveletekhez
-   - Authentikáció middleware JWT-vel
-   - Validation és error handling
-
-2. **MongoDB adatbázis**
-   - Mongoose sémák és modellek
-   - Kapcsolatok kezelése (references)
-   - Indexelés és optimalizálás
-
-3. **Üzleti logika**
-   - Időpont ütközés ellenőrzés
-   - Email értesítések
-   - Foglalási státusz kezelés
-
-4. **Tesztelés**
-   - Unit tesztek (Jest)
-   - Integration tesztek
-   - E2E tesztek (Cypress)
-
-## 📄 Licenc
-
-Ez a projekt oktatási célokra készült.
-
-## 👨‍💻 Készítette
-
-ReserveIt! - Foglalási Rendszer
+Erik Balic - [GitHub](https://github.com/erikbalic1)
 
 ---
 
-**Köszönjük, hogy használod a ReserveIt! rendszert!** 🎉
+**Built with React, Node.js, Express & MongoDB** ⚡

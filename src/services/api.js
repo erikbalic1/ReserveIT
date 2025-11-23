@@ -52,6 +52,13 @@ export const userAPI = {
     return await apiCall(`/users/${id}`);
   },
 
+  update: async (id, userData) => {
+    return await apiCall(`/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData)
+    });
+  },
+
   delete: async (id) => {
     return await apiCall(`/users/${id}`, {
       method: 'DELETE'

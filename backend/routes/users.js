@@ -150,6 +150,60 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// @route   PUT /api/users/:id
+// @desc    Update user profile
+// @access  Public
+router.put('/:id', async (req, res) => {
+  try {
+    const { name, email, phone, password } = req.body;
+    const user = await User.findById(req.params.id);
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    // Check if email is being changed and if it's already taken by another user
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already in use'
+        });
+      }
+    }
+
+    // Update fields
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+    if (password) user.password = password; // Will be hashed by pre-save hook
+
+    await user.save();
+    
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'Error updating user profile',
+      error: error.message
+    });
+  }
+});
+
 // @route   DELETE /api/users/:id
 // @desc    Delete user account
 // @access  Public

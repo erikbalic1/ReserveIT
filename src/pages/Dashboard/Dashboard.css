@@ -191,3 +191,10 @@
     width: 100%;
   }
 }
+
+.account-actions-section {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}

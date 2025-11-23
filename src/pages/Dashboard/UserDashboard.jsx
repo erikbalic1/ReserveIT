@@ -41,6 +41,14 @@ const UserDashboard = () => {
   const [reservations, setReservations] = useState([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   useEffect(() => {
     if (!user || user.role !== 'user') {
@@ -106,6 +114,64 @@ const UserDashboard = () => {
     }
   };
 
+  const handleEditClick = () => {
+    setEditFormData({
+      name: user.name || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      password: '',
+      confirmPassword: ''
+    });
+    setShowEditForm(true);
+  };
+
+  const handleEditInputChange = (e) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    if (editFormData.password && editFormData.password !== editFormData.confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+
+    if (editFormData.password && editFormData.password.length < 6) {
+      alert('Password must be at least 6 characters long!');
+      return;
+    }
+
+    try {
+      const updateData = {
+        name: editFormData.name,
+        email: editFormData.email,
+        phone: editFormData.phone
+      };
+
+      // Only include password if user wants to change it
+      if (editFormData.password) {
+        updateData.password = editFormData.password;
+      }
+
+      const response = await userAPI.update(user.id, updateData);
+
+      if (response.success) {
+        alert('Profile updated successfully!');
+        // Update user in context
+        const updatedUser = { ...user, ...response.data };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        window.location.reload(); // Reload to update context
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
+  };
+
   const filteredReservations = reservations.filter(res => {
     if (filter === 'all') return true;
     if (filter === 'upcoming') return res.status === 'confirmed' || res.status === 'pending';
@@ -144,6 +210,104 @@ const UserDashboard = () => {
             <p>Pending</p>
           </div>
         </div>
+
+        {/* Account Actions */}
+        <div className="account-actions-section">
+          <button 
+            className="btn btn-accent"
+            onClick={handleEditClick}
+          >
+            Edit Account
+          </button>
+          <button 
+            className="btn btn-outline btn-danger"
+            onClick={handleDeleteAccount}
+            style={{ backgroundColor: '#ef4444', color: 'white', border: 'none' }}
+          >
+            Delete Account
+          </button>
+        </div>
+
+        {/* Edit Profile Form */}
+        {showEditForm && (
+          <div className="card" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+            <h2>Edit Profile</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div className="form-group">
+                <label className="form-label">Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  className="form-input"
+                  value={editFormData.name}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  className="form-input"
+                  value={editFormData.email}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Phone *</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  className="form-input"
+                  value={editFormData.phone}
+                  onChange={handleEditInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">New Password (leave blank to keep current)</label>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-input"
+                  value={editFormData.password}
+                  onChange={handleEditInputChange}
+                  placeholder="Minimum 6 characters"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Confirm New Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="form-input"
+                  value={editFormData.confirmPassword}
+                  onChange={handleEditInputChange}
+                  placeholder="Re-enter new password"
+                />
+              </div>
+
+              <div className="form-actions" style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                <button type="submit" className="btn btn-accent">
+                  Save Changes
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-outline"
+                  onClick={() => setShowEditForm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
 
         {/* Filter */}
         <div className="filter-buttons">
@@ -222,16 +386,6 @@ const UserDashboard = () => {
               <p>No reservations to display in this category.</p>
             </div>
           )}
-        </div>
-
-        <div className="delete-account-section">
-          <button 
-            className="btn btn-outline btn-danger"
-            onClick={handleDeleteAccount}
-            style={{ marginTop: '2rem', backgroundColor: '#ef4444', color: 'white', border: 'none' }}
-          >
-            Delete Account
-          </button>
         </div>
       </div>
     </div>
